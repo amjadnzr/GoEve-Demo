@@ -44,6 +44,8 @@ public class Server {
                 case 2:
                     createEvent();
                     break;
+                case 3:
+                    delEvent();
             }
         }while(num!=0);
 
@@ -106,18 +108,6 @@ public class Server {
         System.out.println("Enter event date(DD/MM/YYYY)");
         String date[]= sc.nextLine().split("/");
 
-        while (date.length!=3){
-            System.err.println("Invalid date input");
-            date= sc.nextLine().split("/");
-        }
-
-        System.out.println("Enter event Time(HH:MM)");
-        String time[]= sc.nextLine().split(":");
-
-        while (time.length!=2){
-            System.err.println("Invalid time input");
-            time= sc.nextLine().split(":");
-        }
 
         // to make sure numbers less than 10 are single digits
         if(date[0].charAt(0)=='0'){
@@ -128,6 +118,52 @@ public class Server {
             date[1]=String.valueOf(date[1].charAt(1));
         }
 
+
+        int day=Integer.parseInt(date[0]);
+        int month=Integer.parseInt(date[1]);
+        boolean isDate=true;
+
+        if(day>31 || day<1){
+            isDate=false;
+        }
+
+        if(month>12 || month<1){
+            isDate=false;
+        }
+
+
+        while (date.length!=3 || isDate==false){
+            System.err.println("Invalid date input");
+            date= sc.nextLine().split("/");
+
+            // to make sure numbers less than 10 are single digits
+            if(date[0].charAt(0)=='0'){
+                date[0]=String.valueOf(date[0].charAt(1));
+            }
+
+            if(date[1].charAt(0)=='0'){
+                date[1]=String.valueOf(date[1].charAt(1));
+            }
+
+
+             day=Integer.parseInt(date[0]);
+            month=Integer.parseInt(date[1]);
+             isDate=true;
+            if(day>31 || day<1){
+                isDate=false;
+            }
+
+            if(month>12 || month<1){
+                isDate=false;
+            }
+
+
+        }
+
+
+        System.out.println("Enter event Time(HH:MM)");
+        String time[]= sc.nextLine().split(":");
+
         if(time[0].charAt(0)=='0'){
             time[0]=String.valueOf(time[0].charAt(1));
         }
@@ -136,6 +172,43 @@ public class Server {
             time[1]=String.valueOf(time[1].charAt(1));
         }
 
+        int h=Integer.parseInt(time[0]);
+        int m=Integer.parseInt(time[1]);
+        boolean isTime=true;
+
+        if(h<0 || h>23){
+            isTime=false;
+        }
+
+        if(m<0 || m>59){
+            isTime=false;
+        }
+
+
+        while (time.length!=2 || isTime==false){
+            System.err.println("Invalid time input");
+            time= sc.nextLine().split(":");
+
+            if(time[0].charAt(0)=='0'){
+                time[0]=String.valueOf(time[0].charAt(1));
+            }
+
+            if(time[1].charAt(0)=='0'){
+                time[1]=String.valueOf(time[1].charAt(1));
+            }
+
+             h=Integer.parseInt(time[0]);
+             m=Integer.parseInt(time[1]);
+             isTime=true;
+
+            if(h<0 || h>23){
+                isTime=false;
+            }
+
+            if(m<0 || m>59){
+                isTime=false;
+            }
+        }
 
         Date d= new Date(Integer.parseInt(date[0]),
                          Integer.parseInt(date[1]),
@@ -152,7 +225,18 @@ public class Server {
             count=Integer.parseInt(sc.nextLine());
         }
 
-        Event.createEvent(title,d,count);
+        Event event=Event.createEvent(title,d,count,currentUser);
+        currentUser.addAsEventAdmin(event);
+    }
+
+    private static void delEvent() {
+        System.out.println("---Select Event to delete---");
+        System.out.println("note:user can only delete events which he is admin");
+        Event e=currentUser.deleteFromAdmin();
+        if(e !=null){
+            Event.delEvent(e);
+        }
+
 
     }
 

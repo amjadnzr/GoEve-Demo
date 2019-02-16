@@ -11,6 +11,7 @@ public class User {
     private int age;
     private ArrayList<String> interest;
     private ArrayList<Event> regEvents;
+    private ArrayList<Event> adminEvent;
     private static ArrayList<User> userList= new ArrayList<>();
 
     public User(String email, String password, String name, int age, ArrayList<String> interest) {
@@ -19,6 +20,22 @@ public class User {
         this.name = name;
         this.age = age;
         this.interest = interest;
+    }
+
+    public ArrayList<Event> getAdminEvent() {
+        return adminEvent;
+    }
+
+    public void setAdminEvent(ArrayList<Event> adminEvent) {
+        this.adminEvent = adminEvent;
+    }
+
+    public static ArrayList<User> getUserList() {
+        return userList;
+    }
+
+    public static void setUserList(ArrayList<User> userList) {
+        User.userList = userList;
     }
 
     public String getEmail() {
@@ -199,6 +216,10 @@ public class User {
         System.out.println("Registered Events:");
 
            try {
+
+               if(regEvents.size()==0){
+                   throw new NullPointerException();
+               }
                for (int i = 0; i < this.regEvents.size(); i++) {
                    System.out.println((i + 1) + ". " + this.regEvents.get(i));
                }
@@ -207,8 +228,63 @@ public class User {
            }catch (NullPointerException e){
                System.out.println("None");
            }
+           System.out.println();
+           System.out.println("Admin Events:");
+        try {
 
+            if(this.adminEvent.size()==0){
+                throw new NullPointerException();
+            }
+            for (int i = 0; i < this.adminEvent.size(); i++) {
+                System.out.println((i + 1) + ". " + this.adminEvent.get(i).getTitle());
+            }
+
+
+        }catch (NullPointerException e){
+            System.out.println("None");
+        }
         System.out.println();
+    }
+
+    public void addAsEventAdmin(Event event){
+
+        //adminEvent==null at the beginning
+        try {
+            adminEvent.add(event);
+        }catch (NullPointerException e){
+            adminEvent= new ArrayList<>();
+            adminEvent.add(event);
+        }
+    }
+
+    public Event deleteFromAdmin(){
+        Scanner sc = new Scanner(System.in);
+        Event ev=null;
+        try{
+
+            // after the array is given value except null and again made empty(delete elements) in array
+            // Want to force print statement in catch block
+            if(adminEvent.size()==0){
+                throw new NullPointerException();
+            }
+
+            for(int i=0;i<adminEvent.size();i++){
+                System.out.println((i+1)+". "+adminEvent.get(i).getTitle());
+            }
+            int delNum=Integer.parseInt(sc.nextLine());
+
+            while(delNum<1 || delNum>adminEvent.size()){
+                System.err.println("Invalid input.. Please re-enter");
+                delNum=Integer.parseInt(sc.nextLine());
+            }
+
+            ev= adminEvent.get(delNum-1);
+            adminEvent.remove(delNum-1);
+        }catch (NullPointerException e){
+            System.out.println("No Events created by user");
+        }
+
+        return ev;
     }
 }
 
