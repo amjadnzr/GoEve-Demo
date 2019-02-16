@@ -179,5 +179,35 @@ public class User {
         userList.add(user);
         return user;
     }
+
+
+    public void userInfo(){
+        System.out.println("Name: "+ this.name);
+        System.out.println("Email: "+this.email);
+        System.out.println("Age: " +this.age);
+
+        System.out.println("Interests:");
+        if(this.interest.size()!=0) {
+            for (int i = 0; i < this.interest.size(); i++) {
+                System.out.println((i + 1) + ". " + this.interest.get(i));
+            }
+        }else{
+            System.out.println("None");
+        }
+        System.out.println();
+        System.out.println("Registered Events:");
+
+           try {
+               for (int i = 0; i < this.regEvents.size(); i++) {
+                   System.out.println((i + 1) + ". " + this.regEvents.get(i));
+               }
+
+
+           }catch (NullPointerException e){
+               System.out.println("None");
+           }
+
+        System.out.println();
+    }
 }
 

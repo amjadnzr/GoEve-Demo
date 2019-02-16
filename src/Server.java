@@ -13,14 +13,36 @@ public class Server {
         while(currentUser==null) {
             login();
         }
+        System.out.println("Welcoome: ---"+currentUser.getName()+" ---");
+        int num=0;
+        do {
 
-        System.out.println("1. View Profile");
-        System.out.println("2. Create Event");
-        System.out.println("3. Delete Event");
-        System.out.println("4. Registered Event");
-        System.out.println("5. ");
-        System.out.println("6. View Event upon interest ");
-        System.out.println("7. View All Events");
+            System.out.println("1. View Profile");
+            System.out.println("2. Create Event");
+            System.out.println("3. Delete Event");
+            System.out.println("4. Registered Event");
+            System.out.println("5. Scan Participant");
+            System.out.println("6. View Event upon interest ");
+            System.out.println("7. View All Events");
+            System.out.println("0. Log out");
+
+            num=Integer.parseInt(sc.nextLine());
+
+            while(num<0 || num>7){
+                System.err.println("Invalid input!! Re-enter");
+                num=Integer.parseInt(sc.nextLine());
+            }
+
+            switch(num){
+                case 0:
+                    login();
+                    break;
+                case 1:
+                    currentUser.userInfo();
+                    break;
+            }
+        }while(num!=0);
+
     }
 
 
