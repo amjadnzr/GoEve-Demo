@@ -129,6 +129,7 @@ public class User {
         // validate age between 70 years
         while(age>70 || age<10){
             System.err.println("Age should be in between 0 and 70 years ");
+            age=Integer.parseInt(sc.nextLine());
         }
 
         int a;
