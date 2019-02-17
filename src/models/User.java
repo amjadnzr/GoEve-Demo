@@ -221,7 +221,7 @@ public class User {
                    throw new NullPointerException();
                }
                for (int i = 0; i < this.regEvents.size(); i++) {
-                   System.out.println((i + 1) + ". " + this.regEvents.get(i));
+                   System.out.println((i + 1) + ". " + this.regEvents.get(i).getTitle());
                }
 
 

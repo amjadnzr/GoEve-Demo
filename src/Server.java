@@ -21,10 +21,9 @@ public class Server {
             System.out.println("1. View Profile");
             System.out.println("2. Create Event");
             System.out.println("3. Delete Event");
-            System.out.println("4. Registered Event");
-            System.out.println("5. Scan Participant");
-            System.out.println("6. View Event upon interest ");
-            System.out.println("7. View All Events");
+            System.out.println("4. Register for Event");
+            System.out.println("5. Accept Registration for events");
+            System.out.println("6. Accept User to event");
             System.out.println("0. Log out");
 
             num=Integer.parseInt(sc.nextLine());
@@ -46,10 +45,16 @@ public class Server {
                     break;
                 case 3:
                     delEvent();
+                    break;
+                case 4:
+                    registerEvent();
+                    break;
             }
         }while(num!=0);
 
     }
+
+
 
     public static void login(){
         System.out.println("---select action---");
@@ -87,7 +92,7 @@ public class Server {
     private static void createEvent() {
         System.out.println("---Create Event");
         System.out.println("Select Event Type:");
-
+        String interest[]={"Food Events","Tech Events","Music and Dance Events","Sport Events","Education Event"};
         System.out.println("1. Food Events");
         System.out.println("2. Tech Events");
         System.out.println("3. Music and Dance Events");
@@ -96,11 +101,13 @@ public class Server {
 
         int choice= Integer.parseInt(sc.nextLine());
 
+
         while (choice>5 || choice<0){
             System.err.println("Selection can only be done in the range of 1 to 5");
             System.out.println("Select Event Type");
             choice= Integer.parseInt(sc.nextLine());
         }
+        String type=interest[choice-1];
 
         System.out.println("Enter Event title:");
         String title=sc.nextLine();
@@ -225,7 +232,7 @@ public class Server {
             count=Integer.parseInt(sc.nextLine());
         }
 
-        Event event=Event.createEvent(title,d,count,currentUser);
+        Event event=Event.createEvent(title,d,count,type,currentUser);
         currentUser.addAsEventAdmin(event);
     }
 
@@ -237,6 +244,27 @@ public class Server {
             Event.delEvent(e);
         }
 
+
+    }
+
+    private static void registerEvent() {
+        System.out.println("---Select Action---");
+        System.out.println("1. View Event by user interest");
+        System.out.println("2. Search for top events");
+        int select=Integer.parseInt(sc.nextLine());
+
+        while(select>2 || select<1){
+            System.err.println("Input invalid re-enter");
+            select=Integer.parseInt(sc.nextLine());
+        }
+
+        switch(select){
+            case 1:
+                Event.registerEvent(currentUser);
+                break;
+            case 2:
+                break;
+        }
 
     }
 
