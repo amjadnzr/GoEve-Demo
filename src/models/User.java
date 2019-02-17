@@ -11,6 +11,7 @@ public class User {
     private int age;
     private ArrayList<String> interest;
     private ArrayList<Event> regEvents;
+    private ArrayList<Event> regConfEvents;
     private ArrayList<Event> adminEvent;
     private static ArrayList<User> userList= new ArrayList<>();
 
@@ -20,6 +21,14 @@ public class User {
         this.name = name;
         this.age = age;
         this.interest = interest;
+    }
+
+    public ArrayList<Event> getRegConfEvents() {
+        return regConfEvents;
+    }
+
+    public void setRegConfEvents(ArrayList<Event> regConfEvents) {
+        this.regConfEvents = regConfEvents;
     }
 
     public ArrayList<Event> getAdminEvent() {
@@ -244,6 +253,23 @@ public class User {
             System.out.println("None");
         }
         System.out.println();
+
+        System.out.println("Confirmed Events:");
+
+        try {
+
+            if(regConfEvents.size()==0){
+                throw new NullPointerException();
+            }
+            for (int i = 0; i < this.regConfEvents.size(); i++) {
+                System.out.println((i + 1) + ". " + this.regConfEvents.get(i).getTitle());
+            }
+
+
+        }catch (NullPointerException e){
+            System.out.println("None");
+        }
+        System.out.println();
     }
 
     public void addAsEventAdmin(Event event){
@@ -285,6 +311,14 @@ public class User {
         }
 
         return ev;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
 

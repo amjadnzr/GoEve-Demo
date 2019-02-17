@@ -22,8 +22,9 @@ public class Server {
             System.out.println("2. Create Event");
             System.out.println("3. Delete Event");
             System.out.println("4. Register for Event");
-            System.out.println("5. Accept Registration for events");
-            System.out.println("6. Accept User to event");
+            System.out.println("5. View All Events");
+            System.out.println("6. Accept Registration for events");
+            System.out.println("7. Accept User to event");
             System.out.println("0. Log out");
 
             num=Integer.parseInt(sc.nextLine());
@@ -48,6 +49,12 @@ public class Server {
                     break;
                 case 4:
                     registerEvent();
+                    break;
+                case 5:
+                    allEvents();
+                    break;
+                case 6:
+                    acceptReg();
                     break;
             }
         }while(num!=0);
@@ -263,9 +270,30 @@ public class Server {
                 Event.registerEvent(currentUser);
                 break;
             case 2:
+
                 break;
         }
 
+    }
+
+    private static void allEvents(){
+         ArrayList<Event> events= Event.getEventList();
+
+
+             if (events.size()==0){
+                 System.out.println("No Events in the system");
+             }else {
+
+                 for (int i = 0; i < events.size(); i++) {
+                     System.out.println(events.get(i));
+                 }
+             }
+
+    }
+
+    private static void acceptReg(){
+
+        Event.acceptReg(currentUser);
     }
 
 }
