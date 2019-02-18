@@ -336,5 +336,65 @@ public class Event {
                 }
             }
         }
+
+        // oSNOVNonons
+        public static void searchRegisterEvent(User user){
+            Scanner sc = new Scanner(System.in);
+            Event selectedEvent;
+            System.out.println("---Search Event:input---");
+            String eventName=sc.nextLine();
+
+            ArrayList<Event> result=new ArrayList<>();
+            try {
+                if(eventList.size()==0){
+                    throw new NullPointerException();
+                }
+                for (int i = 0; i < eventList.size(); i++) {
+                    for (int j =0; j < user.getInterest().size(); j++){
+                        if(eventList.get(i).getTitle().substring(0,eventName.length()).equals(eventName)){
+                            result.add(eventList.get(i));
+                        }
+                    }
+                }
+            }catch (NullPointerException e){
+                System.out.println("No Events with interest");
+            }
+
+            if(result.size()==0){
+                System.out.println("No Events of your choice");
+            }else{
+                for (int i=0;i<result.size();i++){
+                    System.out.println((i+1)+". "+result.get(i).getTitle());
+                }
+
+                int val=Integer.parseInt(sc.nextLine());
+                while(val<0 || val>result.size()){
+                    System.err.println("Invalid input.. re-enter");
+                    val=Integer.parseInt(sc.nextLine());
+                }
+
+                selectedEvent=result.get(val-1);
+
+                // saving the user object in the event arraylist
+                try {
+                    selectedEvent.getRegUsers().add(user);
+                }catch (Exception e){
+                    selectedEvent.setRegUsers(new ArrayList<>());
+                    selectedEvent.getRegUsers().add(user);
+                }
+
+                //Saving the event object in the user list
+                try {
+                    user.getRegEvents().add(selectedEvent);
+                }catch (Exception e){
+                    user.setRegEvents(new ArrayList<>());
+                    user.getRegEvents().add(selectedEvent);
+                }
+
+                System.out.println("Successfully Registered");
+            }
+        }
+
+    // onPI vipnn
     }
 

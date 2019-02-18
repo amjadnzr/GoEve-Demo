@@ -115,7 +115,7 @@ public class User {
         String email=sc.nextLine();
         System.out.println("Enter password:");
         String pass=sc.nextLine();
-        User logedUser=new User();
+        User logedUser=null;
 
         if(userList.size()!=0) {
             for (User user : userList) {
@@ -130,7 +130,7 @@ public class User {
             }
 
             //To show user name passwords wrong
-            if(logedUser.getEmail()==null){
+            if(logedUser==null){
                 System.err.println("User name or password invalid");
             }else {
                 System.out.println("You are logged in");

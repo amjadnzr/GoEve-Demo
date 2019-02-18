@@ -279,7 +279,7 @@ public static void action(){
                 Event.registerEvent(currentUser);
                 break;
             case 2:
-
+                Event.searchRegisterEvent(currentUser);
                 break;
         }
 
