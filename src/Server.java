@@ -9,7 +9,7 @@ public class Server {
 
 
     public static void main(String[] args) {
-        System.out.println("------Welcome to GoEve------");
+        System.out.println("------Welcome to GoEve\uD83D\uDE03------");
         System.out.println("To continue");
         while(currentUser==null) {
             login();
@@ -92,8 +92,8 @@ public static void action(){
         }
         else if(select==0){
             System.out.println("---Thank you for using GoEve---");
-            System.out.println("See you soon...");
-            System.out.println("Have a nice day:-)");
+            System.out.println("See you soon...\uD83D\uDCA9");
+            System.out.println("Have a nice day\uD83D\uDE07");
             System.exit(0);
         }
         else{
