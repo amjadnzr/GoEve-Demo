@@ -12,6 +12,7 @@ public class Event {
     private int maxPart;    //Will store the maximum number of partcipants
     private ArrayList<User> regUsers;
     private ArrayList<User> participants; // user who accpeted for event
+    private ArrayList<User> participatedUser; // User who attended the event
     private User admin;
     private String type;
     static ArrayList<Event>eventList= new ArrayList<>();
@@ -37,9 +38,18 @@ public class Event {
         return admin;
     }
 
+    public ArrayList<User> getParticipatedUser() {
+        return participatedUser;
+    }
+
+    public void setParticipatedUser(ArrayList<User> participatedUser) {
+        this.participatedUser = participatedUser;
+    }
+
     public void setAdmin(User admin) {
         this.admin = admin;
     }
+
 
     public Date getEventDate() {
         return eventDate;
@@ -162,90 +172,169 @@ public class Event {
             System.out.println("No Events available");
         }
 
-        else{
+        else {
+            try {
+                for (int i = 0; i < eventList.size(); i++) {
+                    if (eventList.get(i).getAdmin() == user) {
+                        result.add(eventList.get(i));
+                    }
+                }
+
+                for (int i = 0; i < eventList.size(); i++) {
+                    System.out.println((i + 1) + ". " + result.get(i));
+                }
+
+                int input = Integer.parseInt(sc.nextLine());
+
+                while (input < 0 && input > result.size()) {
+                    System.err.println("Invalid input... Re-enter");
+                    input = Integer.parseInt(sc.nextLine());
+                }
+
+                Event thisEvent = eventList.get(input - 1);
+
+                System.out.println("---Registered participant List----");
+                System.out.println("Select to confirm participant");
+                try {
+
+                    if (thisEvent.regUsers.size() == 0) {
+                        throw new NullPointerException();
+                    }
+
+                    for (int i = 0; i < thisEvent.regUsers.size(); i++) {
+                        System.out.println((i + 1) + ". " + thisEvent.regUsers.get(i));
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("No Registrations as yet");
+                    // to make sure further code doesnt get executed
+                    throw new Exception();
+                }
+
+                // Taking input to confirm the user
+                int inputNum = Integer.parseInt(sc.nextLine());
+
+
+                while (0 > inputNum || inputNum > thisEvent.regUsers.size()) {
+                    System.err.println("Invalid input.. Re enter");
+                    inputNum = Integer.parseInt(sc.nextLine());
+                }
+
+                // Get the user from registration list and add to participation list
+                User u = thisEvent.regUsers.get(inputNum - 1);
+                thisEvent.regUsers.remove(inputNum - 1);
+
+                //Decides whether the max partcipant count has reached or not
+                boolean b = true;
+                try {
+                    if (thisEvent.participants.size() == thisEvent.maxPart) {
+                        System.err.println("Maximum participants added");
+                        b = false;
+                    }
+                } catch (Exception e) {
+                    //only exception will be null pointer there for we can consider this coz maxpart > 0
+                    b = true;
+                }
+
+                if (b) {
+                    try {
+                        thisEvent.participants.add(u);
+                    } catch (Exception e) {
+                        thisEvent.participants = new ArrayList<>();
+                        thisEvent.participants.add(u);
+                    }
+
+                    //Adding to user confirmed list
+                    try {
+                        u.getRegConfEvents().add(thisEvent);
+                    } catch (NullPointerException e) {
+                        u.setRegConfEvents(new ArrayList<>());
+                        u.getRegConfEvents().add(thisEvent);
+                    }
+                }
+
+
+            }catch (Exception e){
+                // In case of no registration the futher step must happen thats why create exception and catch
+                System.out.println();
+            }
+        }
+        }
+
+        public static void acceptUser(User user){
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println("----Select Event-----");
+            System.out.println("note:below listed are the events you are admin in");
+            ArrayList<Event> adEv = new ArrayList<>();
 
             for (int i=0;i<eventList.size();i++){
                 if(eventList.get(i).getAdmin()==user){
-                    result.add(eventList.get(i));
+                    adEv.add(eventList.get(i));
                 }
             }
 
-            for (int i=0;i<eventList.size();i++){
-                System.out.println((i+1)+". "+result.get(i));
-            }
+            if(adEv.size()==0){
+                System.err.println("You are not an admin of any event");
+            }else {
 
-            int input=Integer.parseInt(sc.nextLine());
-
-            while (input<0 && input>result.size()){
-                System.err.println("Invalid input... Re-enter");
-                input=Integer.parseInt(sc.nextLine());
-            }
-
-            Event thisEvent=eventList.get(input-1);
-
-            System.out.println("---Registered participant List----");
-            System.out.println("Select to confirm participant");
-            try {
-
-                if(thisEvent.regUsers.size()==0){
-                    throw new NullPointerException();
+                for (int i=0;i<adEv.size();i++) {
+                    System.out.println((i+1)+". "+adEv.get(i).getTitle());
                 }
 
-                for (int i = 0; i < thisEvent.regUsers.size();i++) {
-                    System.out.println((i+1)+". "+thisEvent.regUsers.get(i));
-                }
-            }catch (NullPointerException e){
-                System.out.println("No Registrations as yet");
-            }
+                int num=Integer.parseInt(sc.nextLine());
 
-            // Taking input to confirm the user
-            int inputNum=Integer.parseInt(sc.nextLine());
-
-
-            while (0>inputNum || inputNum>thisEvent.regUsers.size()){
-                System.err.println("Invalid input.. Re enter");
-                inputNum=Integer.parseInt(sc.nextLine());
-            }
-
-            // Get the user from registration list and add to participation list
-            User u=thisEvent.regUsers.get(inputNum-1);
-            thisEvent.regUsers.remove(inputNum-1);
-
-            //Decides whether the max partcipant count has reached or not
-            boolean b=true;
-            try{
-                if(thisEvent.participants.size()==thisEvent.maxPart){
-                    System.err.println("Maximum participants added");
-                    b=false;
-                }
-            }catch (Exception e){
-                //only exception will be null pointer there for we can consider this coz maxpart > 0
-                b=true;
-            }
-
-            if(b) {
-                try {
-                    thisEvent.participants.add(u);
-                } catch (Exception e) {
-                    thisEvent.participants = new ArrayList<>();
-                    thisEvent.participants.add(u);
+                while (num<0 || num>adEv.size()){
+                    System.err.println("Invalid Input");
+                    num=Integer.parseInt(sc.nextLine());
                 }
 
-                //Adding to user confirmed list
+                Event event=adEv.get(num-1);
+
+                System.out.println("To check in Participant:");
+                System.out.println("--Enter Participant email address--");
+                String email=sc.nextLine();
+                boolean in=false;
                 try{
-                    user.getRegConfEvents().add(thisEvent);
-                }catch(NullPointerException e){
-                    user.setRegConfEvents(new ArrayList<>());
-                    user.getRegConfEvents().add(thisEvent);
+
+                    if(event.participants.size()==0){
+                        throw new NullPointerException();
+                    }
+                    for(int i=0;i<event.participants.size();i++){
+                         if(event.participants.get(i).getEmail().equals(email)){
+                             in=true; //confirms that the user has registered
+                             try{
+                                 // Adding Event to user participated list
+                                 event.participants.get(i).getPartEvent().add(event);
+
+                             }catch (NullPointerException e){
+                                 // Adding Event to user participated list
+                                 event.participants.get(i).setPartEvent(new ArrayList<>());
+                                 event.participants.get(i).getPartEvent().add(event);
+
+
+                             }
+
+                             try {
+                                 //Adding User to participatedUsers;
+                                 event.getParticipatedUser().add(event.participants.get(i));
+
+                             }catch (NullPointerException e){
+                                 event.setParticipatedUser(new ArrayList<>());
+                                 event.getParticipatedUser().add(event.participants.get(i));
+                             }
+                         }
+                    }
+                }catch (NullPointerException e){
+                    System.out.println("No registration ");
+                }
+
+                // output of whether user registered for the event or not
+                if(in){
+                    System.out.println("Checking in completed");
+                }else{
+                    System.out.println("User has not registered or has not been accepted by you");
                 }
             }
-
-
-
-
         }
-
-        }
-
     }
 

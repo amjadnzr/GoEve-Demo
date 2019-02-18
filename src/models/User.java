@@ -13,6 +13,7 @@ public class User {
     private ArrayList<Event> regEvents;
     private ArrayList<Event> regConfEvents;
     private ArrayList<Event> adminEvent;
+    private ArrayList<Event> partEvent; // Participated Events
     private static ArrayList<User> userList= new ArrayList<>();
 
     public User(String email, String password, String name, int age, ArrayList<String> interest) {
@@ -23,12 +24,24 @@ public class User {
         this.interest = interest;
     }
 
+    public User() {
+
+    }
+
     public ArrayList<Event> getRegConfEvents() {
         return regConfEvents;
     }
 
     public void setRegConfEvents(ArrayList<Event> regConfEvents) {
         this.regConfEvents = regConfEvents;
+    }
+
+    public ArrayList<Event> getPartEvent() {
+        return partEvent;
+    }
+
+    public void setPartEvent(ArrayList<Event> partEvent) {
+        this.partEvent = partEvent;
     }
 
     public ArrayList<Event> getAdminEvent() {
@@ -102,7 +115,7 @@ public class User {
         String email=sc.nextLine();
         System.out.println("Enter password:");
         String pass=sc.nextLine();
-        User logedUser=null;
+        User logedUser=new User();
 
         if(userList.size()!=0) {
             for (User user : userList) {
@@ -115,10 +128,17 @@ public class User {
                     }
                 }
             }
+
+            //To show user name passwords wrong
+            if(logedUser.getEmail()==null){
+                System.err.println("User name or password invalid");
+            }else {
+                System.out.println("You are logged in");
+            }
         }else{
             System.err.println("Users not available in the system");
         }
-        sc.close();
+
         return logedUser;
     }
 

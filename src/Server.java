@@ -13,55 +13,64 @@ public class Server {
         System.out.println("To continue");
         while(currentUser==null) {
             login();
+            while (currentUser!=null){
+                action();
+            }
         }
-        System.out.println("Welcoome: ---"+currentUser.getName()+" ---");
-        int num=0;
-        do {
-
-            System.out.println("1. View Profile");
-            System.out.println("2. Create Event");
-            System.out.println("3. Delete Event");
-            System.out.println("4. Register for Event");
-            System.out.println("5. View All Events");
-            System.out.println("6. Accept Registration for events");
-            System.out.println("7. Accept User to event");
-            System.out.println("0. Log out");
-
-            num=Integer.parseInt(sc.nextLine());
-
-            while(num<0 || num>7){
-                System.err.println("Invalid input!! Re-enter");
-                num=Integer.parseInt(sc.nextLine());
-            }
-
-            switch(num){
-                case 0:
-                    login();
-                    break;
-                case 1:
-                    currentUser.userInfo();
-                    break;
-                case 2:
-                    createEvent();
-                    break;
-                case 3:
-                    delEvent();
-                    break;
-                case 4:
-                    registerEvent();
-                    break;
-                case 5:
-                    allEvents();
-                    break;
-                case 6:
-                    acceptReg();
-                    break;
-            }
-        }while(num!=0);
 
     }
 
+public static void action(){
 
+    System.out.println("Welcoome: ---"+currentUser.getName()+" ---");
+    int num;
+    do {
+
+        System.out.println("1. View Profile");
+        System.out.println("2. Create Event");
+        System.out.println("3. Delete Event");
+        System.out.println("4. Register for Event");
+        System.out.println("5. View All Events");
+        System.out.println("6. Accept Registration for events");
+        System.out.println("7. Accept User to event");
+        System.out.println("0. Log out");
+
+        num=Integer.parseInt(sc.nextLine());
+
+        while(num<0 || num>7){
+            System.err.println("Invalid input!! Re-enter");
+            num=Integer.parseInt(sc.nextLine());
+        }
+
+        switch(num){
+            case 0:
+                currentUser=null;
+                break;
+            case 1:
+                currentUser.userInfo();
+                break;
+            case 2:
+                createEvent();
+                break;
+            case 3:
+                delEvent();
+                break;
+            case 4:
+                registerEvent();
+                break;
+            case 5:
+                allEvents();
+                break;
+            case 6:
+                acceptReg();
+                break;
+            case 7:
+                acceptUser();
+                break;
+        }
+    }while(num!=0);
+
+}
 
     public static void login(){
         System.out.println("---select action---");
@@ -291,9 +300,8 @@ public class Server {
 
     }
 
-    private static void acceptReg(){
+    private static void acceptReg(){ Event.acceptReg(currentUser); }
 
-        Event.acceptReg(currentUser);
-    }
+       private static void  acceptUser(){ Event.acceptUser(currentUser);}
 
 }
