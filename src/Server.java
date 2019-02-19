@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -7,8 +8,14 @@ public class Server {
       static Scanner sc = new Scanner(System.in);
       static User currentUser=null;
 
+    //default serialVersion id
+    private static final long serialVersionUID = 1L;
 
     public static void main(String[] args) {
+
+        // Firstly have to load the files
+        readFile();
+
         System.out.println("------Welcome to GoEve\uD83D\uDE03------");
         System.out.println("To continue");
         while(currentUser==null) {
@@ -94,6 +101,8 @@ public static void action(){
             System.out.println("---Thank you for using GoEve---");
             System.out.println("See you soon...\uD83D\uDCA9");
             System.out.println("Have a nice day\uD83D\uDE07");
+            //Write file before exit
+            writeFile();
             System.exit(0);
         }
         else{
@@ -302,6 +311,92 @@ public static void action(){
 
     private static void acceptReg(){ Event.acceptReg(currentUser); }
 
-       private static void  acceptUser(){ Event.acceptUser(currentUser);}
+    private static void  acceptUser(){ Event.acceptUser(currentUser);}
 
+    private static void writeFile(){
+
+        // Saving users to the file
+        try {
+            FileOutputStream fileOut = new FileOutputStream(new File("E:\\amjad\\GoEveDemo\\user.txt"));
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            ArrayList<User> userList= User.getUserList();
+            System.out.println("All here"+userList.size());
+
+            for (User user:userList) {
+                objectOut.writeObject(user);
+            }
+            objectOut.close();
+            fileOut.close();
+
+            System.out.println("Users was successfully saved to the file");
+
+        } catch (Exception ex) {
+            System.out.println("Fatal error:User activities not save");
+        }
+
+        // Saving events to the file
+        try {
+            FileOutputStream fileOut = new FileOutputStream(new File("E:\\amjad\\GoEveDemo\\event.txt"));
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            ArrayList<Event> eventList= Event.getEventList();
+
+            for (Event event:eventList) {
+                objectOut.writeObject(event);
+            }
+            objectOut.close();
+            fileOut.close();
+            System.out.println("Events was successfully saved to the file");
+
+        } catch (Exception ex) {
+            System.out.println("Fatal error:Event activities not save");
+        }
+    }
+
+    private static void readFile(){
+        ArrayList<User> userList=User.getUserList();
+        ArrayList<Event> eventList= Event.getEventList();
+
+        // Read User from file
+        try {
+
+            FileInputStream fileIn = new FileInputStream(new File("E:\\amjad\\GoEveDemo\\user.txt"));
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+            while(fileIn.available() !=0) {
+                User obj = (User) objectIn.readObject();
+                userList.add(obj);
+            }
+
+            User.setUserList(userList);
+            System.out.println("The Object has been read from the file");
+            objectIn.close();
+            fileIn.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error in loading User file... please restart");
+
+        }
+
+        // Read Event from file
+        try {
+
+            FileInputStream fileIn = new FileInputStream(new File("E:\\amjad\\GoEveDemo\\event.txt"));
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+            while(fileIn.available() !=0) {
+                Event obj = (Event) objectIn.readObject();
+                eventList.add(obj);
+            }
+
+           Event.setEventList(eventList);
+            System.out.println("The Object has been read from the file");
+            System.out.println(userList.size());
+            objectIn.close();
+            fileIn.close();
+
+        } catch (Exception ex) {
+            System.out.println("Error in loading User file... please restart");
+
+        }
+    }
 }

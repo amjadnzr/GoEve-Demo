@@ -1,9 +1,14 @@
 package models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class User {
+public class User implements Serializable {
+
+
+    //default serialVersion id
+    private static final long serialVersionUID = 1L;
 
     private String email;
     private String password;

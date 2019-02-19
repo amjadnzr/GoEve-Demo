@@ -1,11 +1,15 @@
 package models;
 
-import java.awt.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-public class Event {
+public class Event implements Serializable {
+
+    //default serialVersion id
+    private static final long serialVersionUID = 1L;
 
     private String title;
     private Date eventDate;
@@ -175,7 +179,7 @@ public class Event {
         else {
             try {
                 for (int i = 0; i < eventList.size(); i++) {
-                    if (eventList.get(i).getAdmin() == user) {
+                    if (eventList.get(i).getAdmin().getName().equals(user.getName())) {
                         result.add(eventList.get(i));
                     }
                 }
